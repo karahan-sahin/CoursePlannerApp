@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1014254502270",
+    "firebase_url": "https://mis-49m-app-default-rtdb.firebaseio.com",
+    "project_id": "mis-49m-app",
+    "storage_bucket": "mis-49m-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014254502270:android:50466090d3589381ef332f",
+        "android_client_info": {
+          "package_name": "com.example.courseplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014254502270-o1ma15dhv2229jk1ka75aegq26f1vidb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJx4aZE41jKbHBNQiCc3g4gHRKVMzgfPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014254502270-o1ma15dhv2229jk1ka75aegq26f1vidb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
