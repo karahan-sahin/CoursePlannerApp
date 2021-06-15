@@ -104,4 +104,15 @@ def unicode_fix(filename='courses.json'):
     with open('courses1.json', 'w', encoding="iso-8859-9") as f_out:
         json.dump(updated, f_out, indent=2, ensure_ascii=True)
 
-unicode_fix()
+
+with open('courses1.json', 'r', encoding="utf-8") as f_in:
+    course = json.loads(f_in.read())
+    updated = course
+    for c in course["Courses"].keys():
+        print(c)
+        if "10" in updated["Courses"][c]["hour"]:
+            print(updated["Courses"][c])
+
+
+# with open('courses1.json', 'w', encoding="utf-8") as f_out:
+#     json.dump(updated, f_out, indent=2, ensure_ascii=True)

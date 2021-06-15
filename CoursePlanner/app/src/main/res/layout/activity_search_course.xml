@@ -8,22 +8,23 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="689dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/course_list" />
 
     <EditText
         android:id="@+id/searchText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="413dp"
+        android:layout_height="37dp"
         android:ems="10"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteX="5dp"
         tools:layout_editor_absoluteY="-1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

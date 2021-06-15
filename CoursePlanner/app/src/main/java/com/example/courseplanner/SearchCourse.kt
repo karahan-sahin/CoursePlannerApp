@@ -1,25 +1,26 @@
 package com.example.courseplanner
 
-import android.content.Intent
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_search_course.*
-import java.text.FieldPosition
 
-class SearchCourse : AppCompatActivity() {
+private val context: Context? = null
+
+class SearchCourse : Activity() {
 
     // Hold for every session
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
+    private lateinit var recyclerView: RecyclerView
 
-    lateinit var course_list: ArrayList<DatabaseModel>
-
-    var adapter: DataAdapter? = null
+    private lateinit var course_list: ArrayList<DatabaseModel>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,37 +28,31 @@ class SearchCourse : AppCompatActivity() {
         setContentView(R.layout.activity_search_course)
 
         database = FirebaseDatabase.getInstance()
-        reference = database.getReference("Courses")
+        reference = database.reference
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+
+        course_list = arrayListOf<DatabaseModel>()
 
         getAllCourse()
 
-        var layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+        searchText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
-        val adapter = DataAdapter(course_list)
-        recyclerView.adapter = adapter
+            }
 
-        val input = searchText
-        input.addTextChangedListener(textWatcher)
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-    }
+            }
 
-    val textWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            val query = s.toString()
-            // Recycler view of courses
-            getCourse(query)
-            recyclerView.adapter = DataAdapter(course_list)
-        }
-
+            override fun afterTextChanged(s: Editable) {
+                var query = s.toString()
+                getQueryCourses(query)
+            }
+        })
     }
 
     fun getAllCourse() {
@@ -65,39 +60,48 @@ class SearchCourse : AppCompatActivity() {
         // Get it by textview query
         reference.orderByKey().addValueEventListener(object : ValueEventListener {
             override fun onDataChange(courses: DataSnapshot) {
+
                 // Iterate over snapshot data
                 for (data in courses.children) {
-                    var model = data.getValue(DatabaseModel::class.java)
-                    course_list.add(model as DatabaseModel)
+                    val model = data.getValue(DatabaseModel::class.java)
+                    course_list.add(model!!)
+                    println(data)
                 }
 
+                recyclerView.adapter = DataAdapter(course_list, this@SearchCourse)
             }
+
             override fun onCancelled(error: DatabaseError) {
+                println("Firebase Cancelled")
                 Log.e("cancel", "Cancelled")
             }
         })
-
     }
-    fun getCourse (query: String) {
+
+    fun getQueryCourses(query: String) {
+
         // Get it by textview query
-        reference.orderByKey().startAt(query.uppercase()).addValueEventListener(object : ValueEventListener {
+        reference.orderByKey().startAt(query.uppercase())
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(courses: DataSnapshot) {
 
-                    // Hold the course list
-                    var list = ArrayList<DatabaseModel>()
+                    var list: ArrayList<DatabaseModel> = arrayListOf()
 
                     // Iterate over snapshot data
                     for (data in courses.children) {
-                        var model = data.getValue(DatabaseModel::class.java)
-                        list.add(model as DatabaseModel)
+                        val model = data.getValue(DatabaseModel::class.java)
+                        list.add(model!!)
+                        println(data)
                     }
 
+                    recyclerView.adapter = DataAdapter(list, this@SearchCourse)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    println("Firebase Cancelled")
                     Log.e("cancel", "Cancelled")
                 }
             })
-    }
 
+    }
 }

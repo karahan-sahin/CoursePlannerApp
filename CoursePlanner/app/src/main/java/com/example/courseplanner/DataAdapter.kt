@@ -1,25 +1,22 @@
 package com.example.courseplanner
 
-import android.app.DownloadManager
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.course_list.view.*
-import java.io.File
-import java.io.FileOutputStream
-import java.net.URI
-import java.net.URL
 
-class DataAdapter(var list: ArrayList<DatabaseModel>): RecyclerView.Adapter<DataAdapter.ViewHolder>() {
+
+private val context: Context? = null
+
+class DataAdapter(var list: ArrayList<DatabaseModel>, var activity: Activity): RecyclerView.Adapter<DataAdapter.ViewHolder>() {
+
     class ViewHolder (itemView : View) : RecyclerView.ViewHolder (itemView){
 
         var courseID = itemView.courseIdText
@@ -43,37 +40,25 @@ class DataAdapter(var list: ArrayList<DatabaseModel>): RecyclerView.Adapter<Data
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.courseID.text = list[position].courseID
-        holder.courseName.text = list[position].courseName
-        holder.instructor.text = list[position].instructor
-        holder.days.text = "Days: ${ list[position].days }"
-        holder.hours.text = "Hours: ${ list[position].hours }"
-        holder.credit.text = "Credit: ${ list[position].credit }"
-        holder.ects.text = "ECTS: ${ list[position].ects }"
+        holder.courseID.text = list[position].course_id.toString().replace("-",".")
+        holder.courseName.text = list[position].course_name.toString()
+        holder.instructor.text = list[position].instructor.toString()
+        holder.days.text = "Days: ${ list[position].days.toString() }"
+        holder.hours.text = "Hours: ${ list[position].hours.toString() }"
+        holder.credit.text = "Credit: ${ list[position].credit.toString()}"
+        holder.ects.text = "ECTS: ${ list[position].ects.toString() }"
 
         holder.addCourse.setOnClickListener(View.OnClickListener {
             val intent = Intent()
-            val bundle = Bundle()
-            bundle.putSerializable("course", list[position])
-
-            intent.putExtra("course", bundle)
-            intent.setResult(RESULT_OK,intent)
-
-
+            intent.putExtra("Course",list[position])
+            activity.setResult(Activity.RESULT_OK,intent)
+            activity.finish()
         })
         holder.goSyllabus.setOnClickListener(View.OnClickListener {
             if (list[position].syllabus != "_"){
-                var request = DownloadManager.Request(Uri.parse(list[position].syllabus))
-                request.setTitle("${list[position].courseID} Syllabus")
-                request.setDescription("${list[position].courseID} Syllabus Downloading")
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
-                request.setAllowedOverMetered(true)
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,list[position].courseID)
-
-                // Fix context
-                var dm: DownloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                dm.enqueue(request)
-
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(list[position].syllabus.toString()))
+                activity.startActivity(browserIntent)
+                activity.finish()
             }
             else {
                 // Fix Toast in recycler view
