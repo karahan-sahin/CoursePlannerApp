@@ -13,6 +13,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.api.Response
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_search_course.*
 import kotlinx.android.synthetic.main.course_list.*
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     // Hold for every session
     private lateinit var recyclerView: RecyclerView
@@ -64,6 +65,7 @@ class MainActivity : Activity() {
                         var id = resources.getIdentifier("text${day}_${hour}", "id", packageName)
                         val slot = findViewById<TextView>(id) as TextView
                         slot.text = ""
+                        slot.setBackgroundColor(0x00000000)
                     }
                 }
 
@@ -71,9 +73,10 @@ class MainActivity : Activity() {
 
                 if (!course_names.filter { it == result.course_id.toString() }.any()) {
                     current_courses.add(result)
-                    course_names.add(result.course_id.toString().replace("-","."))
+                    course_names.add(result.course_id.toString().replace("-", "."))
                     total = 0
                 }
+
                 match_table(current_courses)
 
                 recyclerView.adapter = ListAdapter(current_courses)
@@ -104,7 +107,9 @@ class MainActivity : Activity() {
                         hours_idx += 1
                     }
                 } catch (e: Exception) {
-                    match_list.add("${days[i]}_${hours[hours_idx]}")
+                    if (days[i] != 'h'){
+                        match_list.add("${days[i]}_${hours[hours_idx]}")
+                    }
                     break
                 }
             }
@@ -115,27 +120,46 @@ class MainActivity : Activity() {
 
     fun match_table(current_courses: ArrayList<DatabaseModel>){
         for (course in current_courses) {
-            if (course.days == "_" && course.hours == "_"){
-                total += course.credit.toString().toInt()
-                totalCreditText.text = "$total"
+            try {
+                if (course.days == "_" && course.hours == "_") {
+                    total += course.credit.toString().toInt()
+                    totalCreditText.text = "$total"
+                }
+
+                else {
+
+                    for (match in match_days_and_hours(
+                        course.days.toString(),
+                        course.hours.toString()
+                    )) {
+                        println("text${match}")
+                        var id = resources.getIdentifier("text${match}", "id", packageName)
+                        val slot = findViewById<TextView>(id) as TextView
+
+
+                        if (slot.text.toString().replace("-", ".") != "" && slot.text.toString()
+                                .replace("-", ".") != course.course_id.toString().replace("-", ".")
+                        ) {
+                            slot.text = slot.text.toString()
+                                .replace("-", ".") + "\n" + course.course_id.toString()
+                                .replace("-", ".")
+                            slot.setBackgroundColor(Color.parseColor("#E62525"))
+                        } else {
+                            slot.text = course.course_id.toString().replace("-", ".")
+                        }
+                    }
+
+                    // Match with the labs
+                    if (course.credit != "_") {
+                        total += course.credit.toString().toInt()
+                        totalCreditText.text = "$total"
+                    }
+
+                }
             }
-            else {
-               for (match in match_days_and_hours(course.days.toString(), course.hours.toString())) {
-                   var id = resources.getIdentifier("text${match}", "id", packageName)
-                   val slot = findViewById<TextView>(id) as TextView
 
-                   if (slot.text.toString().replace("-",".") != "" && slot.text.toString().replace("-",".") != course.course_id.toString().replace("-",".")) {
-                       slot.text = slot.text.toString().replace("-",".") + "\n" + course.course_id.toString().replace("-",".")
-                       slot.setBackgroundColor(Color.parseColor("#E62525"))
-                   }
-                   else{
-                       slot.text = course.course_id.toString().replace("-",".")
-                   }
-               }
-
-                total += course.credit.toString().toInt()
-                totalCreditText.text = "$total"
-
+            catch (e: Exception) {
+                Toast.makeText(this,"Course cannot be added", Toast.LENGTH_SHORT).show()
             }
         }
     }

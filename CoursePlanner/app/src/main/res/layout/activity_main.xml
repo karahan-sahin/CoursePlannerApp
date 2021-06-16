@@ -576,7 +576,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="101dp"
+            android:layout_height="221dp"
             tools:listitem="@layout/added_course" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

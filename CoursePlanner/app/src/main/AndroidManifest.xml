@@ -16,8 +16,7 @@
         android:theme="@style/Theme.CoursePlanner">
         <activity android:name=".SearchCourse"></activity>
         <activity
-            android:name=".MainActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
