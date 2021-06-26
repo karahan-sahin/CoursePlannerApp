@@ -20,7 +20,7 @@ The languages that are used in this app:
 
 Screenshots:
 
-- ![Screenshot_20210626-075442_CoursePlanner](/home/kara/Documents/Repositories/CoursePlannerApp/Screenshots/Screenshot_20210626-075442_CoursePlanner.jpg)
+- ![Screenshot_20210626-075442_CoursePlanner](Screenshots/Screenshot_20210626-075442_CoursePlanner.jpg)
 
-- <img src="/home/kara/Documents/Repositories/CoursePlannerApp/Screenshots/Screenshot_20210626-075401_CoursePlanner.jpg" alt="Screenshot_20210626-075401_CoursePlanner" style="zoom:67%;" />
+- <img src="Screenshots/Screenshot_20210626-075401_CoursePlanner.jpg" alt="Screenshot_20210626-075401_CoursePlanner" style="zoom:67%;" />
 
