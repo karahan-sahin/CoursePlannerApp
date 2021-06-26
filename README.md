@@ -17,3 +17,10 @@ For the Web Crawler, I will be using the sample url from the University page. Th
 The languages that are used in this app:
 - Kotlin (For the app structure)
 - Python (For the web crawler)
+
+Screenshots:
+
+- ![Screenshot_20210626-075442_CoursePlanner](/home/kara/Documents/Repositories/CoursePlannerApp/Screenshots/Screenshot_20210626-075442_CoursePlanner.jpg)
+
+- <img src="/home/kara/Documents/Repositories/CoursePlannerApp/Screenshots/Screenshot_20210626-075401_CoursePlanner.jpg" alt="Screenshot_20210626-075401_CoursePlanner" style="zoom:67%;" />
+
